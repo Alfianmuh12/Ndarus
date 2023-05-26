@@ -16,6 +16,7 @@ import android.os.Bundle
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
@@ -23,12 +24,16 @@ class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListen
     private lateinit var sensorManager: SensorManager
     private lateinit var locationManager: LocationManager
     private lateinit var compassImage: ImageView
+    private lateinit var directionStatusTextView: TextView
     private var currentDegree = 0f
+    private var currentLatitude = 0.0
+    private var currentLongitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_compass)
         compassImage = findViewById(R.id.iv_compass)
+        directionStatusTextView = findViewById(R.id.tv_direction_status)
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -58,6 +63,15 @@ class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListen
         rotateAnimation.fillAfter = true
         compassImage.startAnimation(rotateAnimation)
         currentDegree = -degree.toFloat()
+
+        val qiblaDirection = getQiblaDirection(currentLatitude, currentLongitude)
+        val tolerance = 5 // Toleransi sudut untuk dianggap mengarah ke kiblat
+
+        if (Math.abs(degree - qiblaDirection) <= tolerance) {
+            directionStatusTextView.text = "Sudah mengarah ke kiblat"
+        } else {
+            directionStatusTextView.text = "Belum mengarah ke kiblat"
+        }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -65,15 +79,25 @@ class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListen
     }
 
     override fun onLocationChanged(location: Location) {
-        // Mendapatkan data lokasi baru
-        val latitude = location.latitude
-        val longitude = location.longitude
+        currentLatitude = location.latitude
+        currentLongitude = location.longitude
+    }
 
-        // Menghitung arah kiblat menggunakan metode lain (contoh: API, perhitungan matematis, atau tabel)
+    private fun getQiblaDirection(latitude: Double, longitude: Double): Float {
+        val kaabaLatitude = 21.4225 // Latitude Kaaba
+        val kaabaLongitude = 39.8262 // Longitude Kaaba
 
-        // Menampilkan arah kiblat
-        val toastText = "Kiblat: $latitude, $longitude" // Ganti dengan arah kiblat yang dihitung
-        Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+        val userLatitudeRad = Math.toRadians(latitude)
+        val kaabaLatitudeRad = Math.toRadians(kaabaLatitude)
+        val deltaLongitudeRad = Math.toRadians(kaabaLongitude - longitude)
+
+        val y = Math.sin(deltaLongitudeRad) * Math.cos(kaabaLatitudeRad)
+        val x = Math.cos(userLatitudeRad) * Math.sin(kaabaLatitudeRad) - Math.sin(userLatitudeRad) * Math.cos(kaabaLatitudeRad) * Math.cos(deltaLongitudeRad)
+
+        var qiblaDirectionRad = Math.atan2(y, x)
+        qiblaDirectionRad = (Math.toDegrees(qiblaDirectionRad) + 360) % 360
+
+        return qiblaDirectionRad.toFloat()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
