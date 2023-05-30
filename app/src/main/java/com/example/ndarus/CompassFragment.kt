@@ -1,6 +1,5 @@
 package com.example.ndarus
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -11,8 +10,11 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
@@ -20,7 +22,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
-class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListener {
+
+
+class CompassFragment : Fragment(), SensorEventListener, LocationListener {
     private lateinit var sensorManager: SensorManager
     private lateinit var locationManager: LocationManager
     private lateinit var compassImage: ImageView
@@ -29,20 +33,23 @@ class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListen
     private var currentLatitude = 0.0
     private var currentLongitude = 0.0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_compass)
-        compassImage = findViewById(R.id.iv_compass)
-        directionStatusTextView = findViewById(R.id.tv_direction_status)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_compass, container, false)
+        compassImage = view.findViewById(R.id.ic_compass)
+        directionStatusTextView = view.findViewById(R.id.tv_direction_status)
+        return view
+    }
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        } else {
-            startCompass()
-        }
+//        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+//        } else {
+//            startCompass()
+//        }
     }
 
     @SuppressLint("MissingPermission")
@@ -106,7 +113,7 @@ class CompassActivity : AppCompatActivity(), SensorEventListener, LocationListen
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCompass()
             } else {
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".CompassActivity">
+    tools:context=".CompassFragment">
 
     <ImageView
-        android:id="@+id/iv_compass"
+        android:id="@+id/ic_compass"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:src="@drawable/ic_compass"
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/iv_compass"
+        app:layout_constraintTop_toBottomOf="@id/ic_compass"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5" />

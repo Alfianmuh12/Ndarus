@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Ndarus</string>
     <string name="compass_image">compass</string>
+    <string name="title_home">Home</string>
+    <string name="title_compass">Compass</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_setting">Setting</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
