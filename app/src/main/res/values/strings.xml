@@ -7,4 +7,6 @@
     <string name="title_setting">Setting</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tab_surah">Surah</string>
+    <string name="tab_Juz">Juz</string>
 </resources>
