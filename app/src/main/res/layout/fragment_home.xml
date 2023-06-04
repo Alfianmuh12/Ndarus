@@ -8,7 +8,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#93BFCF">
 
         <AnalogClock
             android:id="@+id/analogClock"
@@ -26,6 +27,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/analogClock" />
@@ -33,9 +35,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_backgorund"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#93BFCF"
+                android:background="@drawable/rounded_backgorund"
                 app:tabTextColor="@color/white" />
 
             <androidx.viewpager2.widget.ViewPager2
